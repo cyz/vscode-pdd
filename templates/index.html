@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>NoteBoard</title>
+    <link rel="stylesheet" href="/static/style.css">
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="top-left">
+          <a href="/" class="logo" aria-label="Go to home">
+            <!-- clipboard icon -->
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-icon">
+              <path d="M16 4H18C19.1 4 20 4.9 20 6V20C20 21.1 19.1 22 18 22H6C4.9 22 4 21.1 4 20V6C4 4.9 4.9 4 6 4H8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="9" y="2" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <h1>NoteBoard</h1>
+        </div>
+        <div class="top-center">
+          <input id="search" placeholder="Search" class="search" />
+        </div>
+        <div class="top-right">
+          <div class="user">User</div>
+        </div>
+      </header>
+
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <a id="add-note-btn" href="/notes/new" class="add-small">+ Add new</a>
+        </div>
+        <h3 style="margin-top:18px">Categories</h3>
+        <ul id="categories" class="category-list"></ul>
+      </aside>
+
+      <main class="main">
+        <section class="recent-folders">
+          <h3>Recent Folders</h3>
+          <div class="folders-row" id="folders-row">
+            <!-- placeholder for decorative folder cards if needed -->
+          </div>
+        </section>
+
+        <section class="notes-section">
+          <h3>NoteBoard</h3>
+          <div id="notes-list" class="notes-list grid"></div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Dedicated pages used for creation and detail; index only lists notes -->
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

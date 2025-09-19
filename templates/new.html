@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>New Note</title>
+    <link rel="stylesheet" href="/static/style.css">
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="top-left">
+          <a href="/" class="logo" aria-label="Go to home">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-icon">
+              <path d="M16 4H18C19.1 4 20 4.9 20 6V20C20 21.1 19.1 22 18 22H6C4.9 22 4 21.1 4 20V6C4 4.9 4.9 4 6 4H8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="9" y="2" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <h1>Create Note</h1>
+        </div>
+        <div class="top-center"></div>
+        <div class="top-right"></div>
+      </header>
+
+      <aside class="sidebar">
+        <aside class="sidebar">
+          <div class="sidebar-top">
+            <a href="/" class="add-small">← Back</a>
+          </div>
+        </aside>
+      </aside>
+
+      <main class="main">
+        <div class="editor-card">
+          <label>Title</label>
+          <input id="note-title" type="text">
+
+          <label>Category (press Enter to add tag)</label>
+          <div id="category-tags" class="category-tags"></div>
+          <input id="note-category" type="text" placeholder="Type and press Enter to add a tag">
+
+          <label>Content</label>
+          <textarea id="note-content"></textarea>
+
+          <label>Topics</label>
+          <div id="topics-container">
+            <div class="topic-row"><input class="topic-input" placeholder="Topic description"><button class="remove-topic">-</button></div>
+          </div>
+          <button id="add-topic" class="add-small">+ Add topic</button>
+
+          <div class="editor-actions">
+            <button id="save-note" class="add-small">Save</button>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script src="/static/new.js"></script>
+  </body>
+  </html>

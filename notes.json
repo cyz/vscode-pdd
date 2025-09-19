@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1760000000002,
+    "title": "Investor Meeting Prep",
+    "content": "Prepare slides: traction metrics, LTV/CAC, burn rate, hiring plan. Anticipate questions on churn and roadmap.",
+    "topics": [
+      {
+        "text": "Update metrics dashboard",
+        "done": true
+      },
+      {
+        "text": "Create slide on unit economics",
+        "done": false
+      }
+    ],
+    "categories": [
+      "Investors",
+      "Finance"
+    ],
+    "created_at": "2025-09-08T09:00:00Z"
+  },
+  {
+    "id": 1760000000003,
+    "title": "Engineering Hiring Plan",
+    "content": "Plan hiring for backend and infra engineers. Prioritize reliability and observability hires for next two quarters.",
+    "topics": [
+      {
+        "text": "Write job descriptions",
+        "done": true
+      }
+    ],
+    "categories": [
+      "People",
+      "Hiring"
+    ],
+    "created_at": "2025-08-25T11:15:00Z"
+  },
+  {
+    "id": 1760000000004,
+    "title": "Key Customer Feedback",
+    "content": "Notes from recent customer interviews highlighting need for bulk import and better API docs.",
+    "topics": [
+      {
+        "text": "Summarize interview highlights",
+        "done": true
+      },
+      {
+        "text": "Prioritize doc improvements",
+        "done": false
+      }
+    ],
+    "categories": [
+      "Customer"
+    ],
+    "created_at": "2025-09-01T16:45:00Z"
+  }
+]
