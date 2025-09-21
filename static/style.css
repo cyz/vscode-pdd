@@ -510,3 +510,368 @@ body {
 .modal-actions #cancel-note {
   background: #eee;
 }
+
+/* =====================================================
+   RESPONSIVE MEDIA QUERIES
+   ===================================================== */
+
+/* Mobile First Approach - Default styles above are for mobile */
+
+/* Small Mobile Devices (up to 480px) */
+@media (max-width: 480px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "topbar"
+      "main";
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .topbar {
+    padding: 8px 16px;
+    flex-direction: column;
+    gap: 12px;
+    height: auto;
+  }
+
+  .top-left {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .top-left h1 {
+    font-size: 18px;
+  }
+
+  .top-center {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .search {
+    width: 100%;
+    min-width: auto;
+    padding: 12px 16px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  .top-right {
+    display: none;
+  }
+
+  .main {
+    padding: 16px;
+  }
+
+  /* Stack notes vertically on mobile */
+  .notes-list.grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .note {
+    padding: 16px;
+    min-height: 120px;
+  }
+
+  /* Make buttons touch-friendly */
+  .add-small,
+  button {
+    min-height: 44px;
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+
+  .note-delete {
+    width: 36px;
+    height: 36px;
+    top: 12px;
+    right: 12px;
+    opacity: 1;
+    pointer-events: auto;
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  /* Form improvements for mobile */
+  .editor-card {
+    margin: 8px;
+    padding: 16px;
+    max-width: none;
+  }
+
+  .editor-card input,
+  .editor-card textarea {
+    padding: 12px;
+    font-size: 16px; /* Prevents zoom on iOS */
+    border-radius: 8px;
+  }
+
+  .editor-card textarea {
+    min-height: 120px;
+  }
+
+  .topic-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .topic-input {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .remove-topic {
+    align-self: flex-end;
+    padding: 8px 16px;
+    min-height: 44px;
+  }
+
+  .editor-actions {
+    margin-top: 24px;
+  }
+
+  /* Category chips - make them more touch-friendly */
+  .chip,
+  .category-chip {
+    padding: 8px 12px;
+    font-size: 14px;
+    margin: 4px;
+  }
+
+  /* Modal adjustments for mobile */
+  .modal-content {
+    width: calc(100vw - 32px);
+    margin: 16px;
+    max-height: calc(100vh - 32px);
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .modal-actions button {
+    min-height: 44px;
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .detail-topic {
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+
+  .detail-topic input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Large Mobile / Small Tablet (481px to 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "topbar"
+      "main";
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .topbar {
+    padding: 12px 20px;
+  }
+
+  .top-center {
+    max-width: 400px;
+  }
+
+  .search {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 16px;
+  }
+
+  .main {
+    padding: 20px;
+  }
+
+  /* Grid with 2 columns on larger mobile */
+  .notes-list.grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+  }
+
+  .editor-card {
+    margin: 16px auto;
+    max-width: 600px;
+  }
+
+  /* Touch-friendly buttons */
+  .add-small,
+  button {
+    min-height: 44px;
+    padding: 10px 16px;
+  }
+
+  .note-delete {
+    width: 32px;
+    height: 32px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .topic-row {
+    flex-direction: row;
+  }
+}
+
+/* Tablet (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .app {
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: 64px 1fr;
+    grid-template-areas:
+      "topbar topbar"
+      "sidebar main";
+  }
+
+  .sidebar {
+    display: block;
+    padding: 20px;
+  }
+
+  .topbar {
+    padding: 12px 20px;
+  }
+
+  .search {
+    width: 350px;
+    padding: 8px 12px;
+  }
+
+  .main {
+    padding: 24px;
+  }
+
+  /* Grid with 3 columns on tablet */
+  .notes-list.grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .editor-card {
+    max-width: 700px;
+    margin: 16px auto;
+  }
+
+  /* Still touch-friendly but smaller than mobile */
+  .add-small,
+  button {
+    min-height: 40px;
+    padding: 8px 14px;
+  }
+}
+
+/* Desktop (1025px and above) */
+@media (min-width: 1025px) {
+  /* Original desktop layout is preserved above */
+  .app {
+    grid-template-columns: 220px 1fr;
+    grid-template-rows: 72px 1fr;
+    grid-template-areas:
+      "topbar topbar"
+      "sidebar main";
+  }
+
+  /* Hover effects only on desktop */
+  .note:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 24, 40, 0.12);
+  }
+
+  .category-list li:hover {
+    transform: translateX(4px);
+  }
+
+  /* Desktop-specific button sizes */
+  .add-small,
+  button {
+    min-height: auto;
+    padding: 6px 10px;
+  }
+
+  .note-delete {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .note:hover .note-delete {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* Large Desktop (1400px and above) - Optional enhancement */
+@media (min-width: 1400px) {
+  .app {
+    grid-template-columns: 260px 1fr;
+  }
+
+  .sidebar {
+    padding: 28px;
+  }
+
+  .main {
+    padding: 32px;
+  }
+
+  .notes-list.grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .editor-card {
+    max-width: 900px;
+  }
+}
+
+/* Accessibility & Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .note:hover {
+    transform: none;
+  }
+
+  .category-list li:hover {
+    transform: none;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .note {
+    border: 2px solid #000;
+  }
+
+  .search {
+    border: 2px solid #000;
+  }
+
+  .add-small,
+  button {
+    border: 2px solid #000;
+  }
+}

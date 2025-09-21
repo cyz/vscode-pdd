@@ -27,6 +27,10 @@
       {
         "text": "Write job descriptions",
         "done": true
+      },
+      {
+        "text": "Post on LinkedIn",
+        "done": false
       }
     ],
     "categories": [
