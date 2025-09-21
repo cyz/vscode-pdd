@@ -3,6 +3,7 @@ const els = (sel) => Array.from(document.querySelectorAll(sel))
 
 const notesList = el('#notes-list')
 const categoriesEl = el('#categories')
+const mobileCategorySelect = el('#mobile-category-select')
 
 let activeCategory = null
 
@@ -116,6 +117,17 @@ async function loadCategories(){
   const res = await fetch('/api/categories')
   const cats = await res.json()
   categoriesEl.innerHTML = ''
+  
+  // Populate mobile dropdown
+  if (mobileCategorySelect) {
+    mobileCategorySelect.innerHTML = ''
+    const allOption = document.createElement('option')
+    allOption.value = ''
+    allOption.textContent = 'All Categories'
+    if (!activeCategory) allOption.selected = true
+    mobileCategorySelect.appendChild(allOption)
+  }
+  
   // Corrige: mostra o total de notas em 'All'
   const notes = window._notes_cache || [];
   const allLi = document.createElement('li')
@@ -130,6 +142,15 @@ async function loadCategories(){
     if(c.name===activeCategory) li.classList.add('active')
     li.addEventListener('click', ()=>{ activeCategory=c.name; setActiveCategory(c.name); loadNotes(); loadCategories(); })
     categoriesEl.appendChild(li)
+    
+    // Add to mobile dropdown
+    if (mobileCategorySelect) {
+      const option = document.createElement('option')
+      option.value = c.name
+      option.textContent = `${c.name} (${c.count})`
+      if (c.name === activeCategory) option.selected = true
+      mobileCategorySelect.appendChild(option)
+    }
   })
 }
 
@@ -138,6 +159,17 @@ function setActiveCategory(name){
     if(name && li.textContent.startsWith(name)) li.classList.add('active')
     else if(!name && li.textContent.startsWith('All')) li.classList.add('active')
     else li.classList.remove('active')
+  })
+}
+
+// Mobile category dropdown handler
+if (mobileCategorySelect) {
+  mobileCategorySelect.addEventListener('change', (e) => {
+    const selectedCategory = e.target.value
+    activeCategory = selectedCategory || null
+    setActiveCategory(activeCategory)
+    loadNotes()
+    loadCategories()
   })
 }
 
