@@ -4,8 +4,11 @@ const els = (sel) => Array.from(document.querySelectorAll(sel))
 const notesList = el('#notes-list')
 const categoriesEl = el('#categories')
 const mobileCategorySelect = el('#mobile-category-select')
+const searchInput = el('#search')
+const searchClear = el('#search-clear')
 
 let activeCategory = null
+let searchQuery = ''
 
 function pickColorFor(name){
   const palette = ['#ffefef','#fff6e8','#fffcec','#f2fff0','#e8fbff','#eef4ff','#f7ecff']
@@ -15,6 +18,14 @@ function pickColorFor(name){
 }
 
 function escapeHtml(s){ if(!s) return ''; return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;') }
+
+function highlightSearchTerm(text, query) {
+  if (!query.trim() || !text) return escapeHtml(text)
+  
+  const escaped = escapeHtml(text)
+  const regex = new RegExp(`(${escapeHtml(query).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
+  return escaped.replace(regex, '<span class="search-highlight">$1</span>')
+}
 
 function formatDateUS(iso){
   try{
@@ -27,24 +38,58 @@ function formatDateUS(iso){
   }catch(e){ return iso }
 }
 
+function filterNotes(notes) {
+  let filtered = notes
+  
+  // Apply category filter
+  if (activeCategory) {
+    filtered = filtered.filter(n => (n.categories || []).includes(activeCategory))
+  }
+  
+  // Apply search filter
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase().trim()
+    filtered = filtered.filter(n => {
+      const title = (n.title || '').toLowerCase()
+      const content = (n.content || '').toLowerCase()
+      const categories = (n.categories || []).join(' ').toLowerCase()
+      
+      return title.includes(query) || 
+             content.includes(query) || 
+             categories.includes(query)
+    })
+  }
+  
+  return filtered
+}
+
 async function loadNotes(){
   const res = await fetch('/api/notes')
   const notes = await res.json()
   // cache notes on window for search/filtering
   window._notes_cache = notes
-  renderNotes(notes)
+  renderNotes()
 }
 
-function renderNotes(notes){
+function renderNotes(){
+  if (!window._notes_cache) return
+  
   notesList.innerHTML = ''
-  const byCategory = activeCategory ? notes.filter(n=> (n.categories||[]).includes(activeCategory) ) : notes
-  const filtered = byCategory
+  const filtered = filterNotes(window._notes_cache)
   filtered.forEach(n=>{
     const d = document.createElement('div')
     d.className = 'note'
-  const categories = (n.categories && Array.isArray(n.categories) && n.categories.length) ? n.categories : (n.category? (n.category||'').split(/,\s*/).filter(Boolean) : ['Uncategorized'])
-    const catHtml = categories.map(c=>`<span class="category-chip" style="background:${pickColorFor(c)}">${escapeHtml(c)}</span>`).join(' ')
-  d.innerHTML = `<h4>${escapeHtml(n.title)}</h4><div class="meta">${catHtml} • ${formatDateUS(n.created_at)}</div><p>${escapeHtml(n.content||'')}</p>`
+    const categories = (n.categories && Array.isArray(n.categories) && n.categories.length) ? n.categories : (n.category? (n.category||'').split(/,\s*/).filter(Boolean) : ['Uncategorized'])
+    
+    // Apply search highlighting if there's a search query
+    const highlightedTitle = searchQuery.trim() ? highlightSearchTerm(n.title, searchQuery) : escapeHtml(n.title)
+    const highlightedContent = searchQuery.trim() ? highlightSearchTerm(n.content || '', searchQuery) : escapeHtml(n.content || '')
+    const catHtml = categories.map(c => {
+      const highlightedCat = searchQuery.trim() ? highlightSearchTerm(c, searchQuery) : escapeHtml(c)
+      return `<span class="category-chip" style="background:${pickColorFor(c)}">${highlightedCat}</span>`
+    }).join(' ')
+    
+    d.innerHTML = `<h4>${highlightedTitle}</h4><div class="meta">${catHtml} • ${formatDateUS(n.created_at)}</div><p>${highlightedContent}</p>`
   // pick background color based on title
   d.style.background = pickColorFor(n.title || String(n.id))
   d.style.color = '#1f2937'
@@ -133,14 +178,14 @@ async function loadCategories(){
   const allLi = document.createElement('li')
   allLi.textContent = `All (${notes.length})`
   allLi.className = activeCategory? '': 'active'
-  allLi.addEventListener('click', ()=>{ activeCategory=null; setActiveCategory(null); loadNotes(); loadCategories(); })
+  allLi.addEventListener('click', ()=>{ activeCategory=null; setActiveCategory(null); renderNotes(); loadCategories(); })
   categoriesEl.appendChild(allLi)
 
   cats.forEach(c=>{
     const li = document.createElement('li')
     li.textContent = `${c.name} (${c.count})`
     if(c.name===activeCategory) li.classList.add('active')
-    li.addEventListener('click', ()=>{ activeCategory=c.name; setActiveCategory(c.name); loadNotes(); loadCategories(); })
+    li.addEventListener('click', ()=>{ activeCategory=c.name; setActiveCategory(c.name); renderNotes(); loadCategories(); })
     categoriesEl.appendChild(li)
     
     // Add to mobile dropdown
@@ -168,9 +213,101 @@ if (mobileCategorySelect) {
     const selectedCategory = e.target.value
     activeCategory = selectedCategory || null
     setActiveCategory(activeCategory)
-    loadNotes()
+    renderNotes()
     loadCategories()
   })
+}
+
+// Real-time search functionality
+if (searchInput) {
+  function handleSearchChange() {
+    searchQuery = searchInput.value
+    renderNotes()
+    updateSearchResults()
+    
+    // Show/hide clear button
+    if (searchClear) {
+      searchClear.style.display = searchQuery.trim() ? 'flex' : 'none'
+    }
+  }
+  
+  // Use input event for real-time search as user types
+  searchInput.addEventListener('input', handleSearchChange)
+  
+  // Also handle paste events
+  searchInput.addEventListener('paste', (e) => {
+    // Small delay to let the paste complete
+    setTimeout(handleSearchChange, 10)
+  })
+  
+  // Clear search when escape is pressed
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      clearSearch()
+    }
+  })
+}
+
+// Clear search functionality
+function clearSearch() {
+  if (searchInput) {
+    searchInput.value = ''
+  }
+  searchQuery = ''
+  renderNotes()
+  updateSearchResults()
+  
+  if (searchClear) {
+    searchClear.style.display = 'none'
+  }
+  
+  if (searchInput) {
+    searchInput.focus()
+  }
+}
+
+if (searchClear) {
+  searchClear.addEventListener('click', clearSearch)
+}
+
+function updateSearchResults() {
+  const totalNotes = window._notes_cache ? window._notes_cache.length : 0
+  const filteredNotes = window._notes_cache ? filterNotes(window._notes_cache) : []
+  const hasSearch = searchQuery.trim().length > 0
+  const hasCategory = activeCategory !== null
+  
+  // Update the notes section header to show search results
+  const notesSectionHeader = el('.notes-section h3')
+  if (notesSectionHeader) {
+    if (hasSearch && hasCategory) {
+      notesSectionHeader.textContent = `Search "${searchQuery}" in ${activeCategory} (${filteredNotes.length} results)`
+    } else if (hasSearch) {
+      notesSectionHeader.textContent = `Search "${searchQuery}" (${filteredNotes.length} results)`
+    } else if (hasCategory) {
+      notesSectionHeader.textContent = `${activeCategory} (${filteredNotes.length} notes)`
+    } else {
+      notesSectionHeader.textContent = 'NoteBoard'
+    }
+  }
+  
+  // Show "no results" message if needed
+  if (filteredNotes.length === 0 && (hasSearch || hasCategory)) {
+    if (!el('.no-results-message')) {
+      const noResultsMsg = document.createElement('div')
+      noResultsMsg.className = 'no-results-message'
+      noResultsMsg.innerHTML = `
+        <p>No notes found${hasSearch ? ` for "${searchQuery}"` : ''}${hasCategory ? ` in category "${activeCategory}"` : ''}.</p>
+        <p>Try adjusting your search terms or category filter.</p>
+      `
+      notesList.appendChild(noResultsMsg)
+    }
+  } else {
+    // Remove no results message if it exists
+    const existingMsg = el('.no-results-message')
+    if (existingMsg) {
+      existingMsg.remove()
+    }
+  }
 }
 
 // initial load
