@@ -1,21 +1,21 @@
 [
   {
     "id": 1760000000002,
-    "title": "Investor Meeting Prep",
-    "content": "Prepare slides: traction metrics, LTV/CAC, burn rate, hiring plan. Anticipate questions on churn and roadmap.",
+    "title": "Prepare Jira MCP Server Session",
+    "content": "Prepare slides: with all Slides required and roadmap session.",
     "topics": [
       {
-        "text": "Update metrics dashboard",
+        "text": "Update jira dashboard",
         "done": true
       },
       {
-        "text": "Create slide on unit economics",
+        "text": "Create slide on MCP server advantages",
         "done": false
       }
     ],
     "categories": [
-      "Investors",
-      "Finance"
+      "Learning",
+      "AI"
     ],
     "created_at": "2025-09-08T09:00:00Z"
   },

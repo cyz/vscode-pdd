@@ -286,7 +286,7 @@ function updateSearchResults() {
     } else if (hasCategory) {
       notesSectionHeader.textContent = `${activeCategory} (${filteredNotes.length} notes)`
     } else {
-      notesSectionHeader.textContent = 'NoteBoard'
+      notesSectionHeader.textContent = 'Welcome to NoteBoard Demo App'
     }
   }
   
